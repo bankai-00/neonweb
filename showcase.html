@@ -1,0 +1,1248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profiles Showcase - Neonfolio</title>
+  <meta name="description" content="Browse and manage your portfolio profile on Neonfolio. One profile per user with full CRUD operations and ownership protection.">
+  <meta name="keywords" content="profile showcase, portfolio profiles, neonfolio profiles, creative portfolio">
+  <meta name="author" content="Ashutosh Sharma">
+  <meta name="theme-color" content="#050507">
+  <meta property="og:title" content="Profiles Showcase - Neonfolio">
+  <meta property="og:description" content="Browse creative profiles and manage your own portfolio on Neonfolio.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://neonfolio.com/pages/showcase.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://neonfolio.com/pages/showcase.html">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-0: #050507;
+      --bg-1: #0a0a0f;
+      --bg-2: #15151f;
+      --text-primary: #ffffff;
+      --text-muted: #a0a0b0;
+      --neon-cyan: #00F5FF;
+      --neon-magenta: #FF33C8;
+      --neon-lime: #C8FF00;
+      --glass-light: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --glow-cyan: 0 0 20px rgba(0, 245, 255, 0.5);
+      --glow-magenta: 0 0 20px rgba(255, 51, 200, 0.5);
+      --transition: all 0.16s ease;
+      --radius: 14px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--bg-0), var(--bg-1));
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* HEADER */
+    .site-header {
+      background: rgba(5, 5, 7, 0.8);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: var(--neon-cyan);
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+      transition: var(--transition);
+    }
+
+    .logo:hover {
+      text-shadow: 0 0 20px rgba(0, 245, 255, 0.8);
+    }
+
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--neon-cyan);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .nav-list a {
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: var(--transition);
+      position: relative;
+      font-weight: 500;
+    }
+
+    .nav-list a:hover,
+    .nav-list a.active {
+      color: var(--neon-cyan);
+    }
+
+    .nav-list a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--neon-cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: var(--neon-cyan);
+      color: var(--bg-0);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 30px rgba(0, 245, 255, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 245, 255, 0.3);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0, 245, 255, 0.1);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .btn-danger {
+      background: rgba(255, 51, 200, 0.2);
+      color: var(--neon-magenta);
+      border: 1px solid var(--neon-magenta);
+    }
+
+    .btn-danger:hover {
+      background: rgba(255, 51, 200, 0.3);
+      box-shadow: var(--glow-magenta);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px;
+      background: rgba(0, 245, 255, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(0, 245, 255, 0.3);
+    }
+
+    .user-info span {
+      font-size: 0.85rem;
+      color: var(--neon-cyan);
+    }
+
+    .btn-logout {
+      padding: 6px 12px;
+      background: rgba(255, 51, 200, 0.2);
+      color: var(--neon-magenta);
+      border: 1px solid var(--neon-magenta);
+      font-size: 0.75rem;
+    }
+
+    .btn-logout:hover {
+      background: rgba(255, 51, 200, 0.3);
+    }
+
+    @media (max-width: 720px) {
+      .nav-toggle {
+        display: block;
+      }
+
+      .nav-list {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: rgba(5, 5, 7, 0.95);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 16px 24px;
+      }
+
+      .nav-list.open {
+        display: flex;
+      }
+
+      .nav-list a {
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .user-info {
+        display: none;
+      }
+    }
+
+    /* MAIN */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      min-height: calc(100vh - 240px);
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-bottom: 24px;
+    }
+
+    .neon-underline {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+      margin: 0 auto 24px;
+      border-radius: 2px;
+      box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+    }
+
+    .add-profile-section {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+
+    .btn-add-profile {
+      padding: 12px 32px;
+      font-size: 1rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+      color: var(--bg-0);
+      box-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+    }
+
+    .btn-add-profile:hover {
+      box-shadow: 0 0 50px rgba(0, 245, 255, 0.8), 0 0 30px rgba(255, 51, 200, 0.5);
+      transform: translateY(-3px);
+    }
+
+    /* PROFILES GRID */
+    .profiles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 1100px) {
+      .profiles-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .profiles-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* PROFILE CARD */
+    .profile-card {
+      background: linear-gradient(135deg, var(--glass-light), rgba(255, 255, 255, 0.02));
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      backdrop-filter: blur(8px);
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .profile-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(0, 245, 255, 0.1), transparent);
+      opacity: 0;
+      transition: var(--transition);
+      pointer-events: none;
+    }
+
+    .profile-card:hover {
+      border-color: rgba(0, 245, 255, 0.5);
+      box-shadow: 0 0 30px rgba(0, 245, 255, 0.3), inset 0 0 20px rgba(0, 245, 255, 0.05);
+      transform: translateY(-8px);
+    }
+
+    .profile-card:hover::before {
+      opacity: 1;
+    }
+
+    .profile-image {
+      width: 100%;
+      height: 150px;
+      background: linear-gradient(135deg, var(--bg-2), rgba(200, 255, 0, 0.1));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 16px;
+      color: var(--neon-lime);
+    }
+
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .profile-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .profile-description {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      flex-grow: 1;
+      line-height: 1.5;
+    }
+
+    .profile-category {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(0, 245, 255, 0.1);
+      color: var(--neon-cyan);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      border: 1px solid rgba(0, 245, 255, 0.3);
+    }
+
+    .profile-owner {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .profile-owner strong {
+      color: var(--neon-magenta);
+    }
+
+    .profile-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .profile-actions button,
+    .profile-actions a {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 0.75rem;
+      border-radius: 6px;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, var(--glass-light), rgba(255, 255, 255, 0.02));
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 36px;
+      backdrop-filter: blur(16px);
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 245, 255, 0.2);
+    }
+
+    .modal-header {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 8px;
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      color: var(--neon-cyan);
+    }
+
+    /* FORM */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 245, 255, 0.3);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 15px rgba(0, 245, 255, 0.3);
+      background: rgba(0, 245, 255, 0.05);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .form-actions button {
+      flex: 1;
+      padding: 12px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .btn-submit {
+      background: var(--neon-cyan);
+      color: var(--bg-0);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .btn-submit:hover {
+      box-shadow: 0 0 30px rgba(0, 245, 255, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-cancel {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--glass-border);
+    }
+
+    .btn-cancel:hover {
+      border-color: var(--neon-magenta);
+      color: var(--neon-magenta);
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 60px 24px;
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    .empty-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .empty-text {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    /* ALERT/TOAST */
+    .alert {
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      border-left: 4px solid;
+      background: rgba(255, 255, 255, 0.05);
+      font-size: 0.9rem;
+    }
+
+    .alert-info {
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+    }
+
+    .alert-warning {
+      border-color: var(--neon-magenta);
+      color: var(--neon-magenta);
+    }
+
+    .alert-success {
+      border-color: var(--neon-lime);
+      color: var(--neon-lime);
+    }
+
+    /* FOOTER */
+    .site-footer {
+      background: rgba(5, 5, 7, 0.8);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 32px 24px;
+      margin-top: 60px;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .footer-info p {
+      margin: 4px 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-info p:first-child {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .socials {
+      display: flex;
+      gap: 16px;
+      justify-content: flex-end;
+    }
+
+    .social {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(0, 245, 255, 0.1);
+      color: var(--neon-cyan);
+      transition: var(--transition);
+      text-decoration: none;
+      border: 1px solid rgba(0, 245, 255, 0.3);
+    }
+
+    .social svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .social:hover {
+      background: rgba(0, 245, 255, 0.2);
+      box-shadow: var(--glow-cyan);
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 720px) {
+      .footer-inner {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .socials {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER / NAVIGATION -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="Neonfolio Home">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
+          <defs>
+            <linearGradient id="logo-grad" x1="0" x2="1">
+              <stop offset="0" stop-color="#00F5FF"/>
+              <stop offset="1" stop-color="#FF33C8"/>
+            </linearGradient>
+          </defs>
+          <circle cx="16" cy="16" r="10" fill="none" stroke="url(#logo-grad)" stroke-width="2"/>
+        </svg>
+        Neonfolio
+      </a>
+
+      <nav class="main-nav" role="navigation" aria-label="Main Navigation">
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-list" aria-label="Toggle navigation">☰</button>
+        <ul id="nav-list" class="nav-list" role="menubar">
+          <li role="none"><a role="menuitem" href="index.html">Home</a></li>
+          <li role="none"><a role="menuitem" href="about.html">About</a></li>
+          <li role="none"><a role="menuitem" href="showcase.html" class="active">Showcase</a></li>
+          <li role="none"><a role="menuitem" href="contact.html">Contact</a></li>
+          <li role="none"><a role="menuitem" href="login.html">Login</a></li>
+          <li role="none"><a class="btn btn-primary" href="register.html">Register</a></li>
+        </ul>
+        <div class="user-info" id="userInfo" style="display: none;">
+          <span>Logged in as: <strong id="currentUsername"></strong></span>
+          <button class="btn btn-logout" onclick="app.logout()">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main role="main">
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <h1 class="page-title">Profiles Showcase</h1>
+      <p class="page-subtitle">Browse creative portfolios and manage your own profile.</p>
+      <div class="neon-underline"></div>
+    </div>
+
+    <!-- LOGIN REQUIRED ALERT -->
+    <div id="loginAlert" class="alert alert-info" style="display: none;">
+      ℹ️ You must <a href="login.html" style="color: var(--neon-cyan); text-decoration: underline;">log in</a> to create or manage your profile.
+    </div>
+
+    <!-- ADD PROFILE BUTTON -->
+    <div class="add-profile-section" id="addProfileSection" style="display: none;">
+      <button class="btn btn-add-profile" id="btnAddProfile">+ Create Your Profile</button>
+    </div>
+
+    <!-- PROFILES GRID -->
+    <div class="profiles-grid" id="profilesGrid"></div>
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state" id="emptyState" style="display: none;">
+      <div class="empty-icon">👤</div>
+      <h3 class="empty-title">No Profiles Yet</h3>
+      <p class="empty-text">Be the first to create your profile on Neonfolio.</p>
+    </div>
+  </main>
+
+  <!-- MODAL FOR ADD/EDIT PROFILE -->
+  <div class="modal" id="profileModal">
+    <div class="modal-content">
+      <button class="modal-close" id="btnCloseModal">&times;</button>
+      <h2 class="modal-header" id="modalTitle">Create Profile</h2>
+
+      <form id="profileForm">
+        <div class="form-group">
+          <label for="profileTitle">Profile Title *</label>
+          <input type="text" id="profileTitle" name="title" placeholder="e.g., John Doe - UI Designer" required>
+        </div>
+
+        <div class="form-group">
+          <label for="profileDescription">Description *</label>
+          <textarea id="profileDescription" name="description" placeholder="Tell us about yourself and your work..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="profileCategory">Category *</label>
+          <select id="profileCategory" name="category" required>
+            <option value="">Select a category</option>
+            <option value="designer">Designer</option>
+            <option value="developer">Developer</option>
+            <option value="photographer">Photographer</option>
+            <option value="artist">Artist</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="profileImage">Profile Image URL</label>
+          <input type="url" id="profileImage" name="image" placeholder="https://example.com/image.jpg">
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-submit">Save Profile</button>
+          <button type="button" class="btn btn-cancel" id="btnCancelModal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-info">
+        <p style="font-weight: 600; color: var(--text-primary);">Neonfolio</p>
+        <p>A modern portfolio platform with a neon aesthetic.</p>
+        <p>&copy; 2025 — All rights reserved.</p>
+      </div>
+      <div>
+        <div class="socials">
+          <a href="#" aria-label="Twitter" class="social" title="Twitter">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2s9 5 20 5a9.5 9.5 0 00-9-5.5c4.75 2.45 7-7 7-7s-1 6-5 8V7a4.5 4.5 0 008-4z"/></svg>
+          </a>
+          <a href="#" aria-label="GitHub" class="social" title="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+          <a href="#" aria-label="Email" class="social" title="Email">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ========================================
+       NEONFOLIO SHOWCASE - PROFILE MANAGEMENT
+       WITH AUTHENTICATION & OWNERSHIP PROTECTION
+       ======================================== */
+
+    class ProfileManager {
+      constructor() {
+        this.currentUser = this.getCurrentUser();
+        this.profiles = this.getProfiles();
+        this.editingProfileId = null;
+      }
+
+      // ============ AUTH CHECKING ============
+      // Check if user is logged in, redirect to login if not
+      getCurrentUser() {
+        const user = localStorage.getItem('currentUser');
+        return user ? JSON.parse(user) : null;
+      }
+
+      checkAuth() {
+        if (!this.currentUser) {
+          document.getElementById('loginAlert').style.display = 'block';
+          document.getElementById('addProfileSection').style.display = 'none';
+          return false;
+        }
+        return true;
+      }
+
+      // ============ PROFILE LOADING ============
+      // Load all profiles from localStorage
+      getProfiles() {
+        const stored = localStorage.getItem('profiles');
+        if (stored) {
+          try {
+            return JSON.parse(stored);
+          } catch (e) {
+            console.error('Error loading profiles:', e);
+            return [];
+          }
+        }
+        return [];
+      }
+
+      // ============ SAVE PROFILES ============
+      // Save profiles back to localStorage
+      saveProfiles() {
+        localStorage.setItem('profiles', JSON.stringify(this.profiles));
+      }
+
+      // ============ PROFILE LIMIT CHECK ============
+      // Check if user already has a profile (one per user rule)
+      getUserProfileCount() {
+        if (!this.currentUser) return 0;
+        return this.profiles.filter(p => p.ownerId === this.currentUser.id).length;
+      }
+
+      // Get user's own profile (if exists)
+      getUserProfile() {
+        if (!this.currentUser) return null;
+        return this.profiles.find(p => p.ownerId === this.currentUser.id) || null;
+      }
+
+      // ============ OWNERSHIP VALIDATION ============
+      // Check if current user owns the profile
+      isProfileOwner(profileId) {
+        if (!this.currentUser) return false;
+        const profile = this.profiles.find(p => p.id === profileId);
+        return profile && profile.ownerId === this.currentUser.id;
+      }
+
+      // ============ ADD PROFILE ============
+      // Add new profile (only if user has zero profiles)
+      addProfile(data) {
+        // Validation: Must be logged in
+        if (!this.currentUser) {
+          this.showAlert('You must log in to create a profile', 'warning');
+          return false;
+        }
+
+        // Validation: One profile per user
+        if (this.getUserProfileCount() >= 1) {
+          this.showAlert('You can only create one profile. Delete your current profile to create a new one.', 'warning');
+          return false;
+        }
+
+        // Create new profile with ownership
+        const newProfile = {
+          id: Date.now(),
+          ownerId: this.currentUser.id, // Link to current user
+          title: data.title,
+          description: data.description,
+          category: data.category,
+          image: data.image || null,
+          dateCreated: new Date().toISOString()
+        };
+
+        this.profiles.unshift(newProfile);
+        this.saveProfiles();
+        this.showAlert('Profile created successfully!', 'success');
+        return true;
+      }
+
+      // ============ EDIT PROFILE ============
+      // Edit profile (only if owner)
+      editProfile(profileId, data) {
+        // Validation: Must be owner
+        if (!this.isProfileOwner(profileId)) {
+          this.showAlert('You can only manage your own profile.', 'warning');
+          return false;
+        }
+
+        const profile = this.profiles.find(p => p.id === profileId);
+        if (profile) {
+          profile.title = data.title;
+          profile.description = data.description;
+          profile.category = data.category;
+          profile.image = data.image || null;
+          this.saveProfiles();
+          this.showAlert('Profile updated successfully!', 'success');
+          return true;
+        }
+        return false;
+      }
+
+      // ============ DELETE PROFILE ============
+      // Delete profile (only if owner)
+      deleteProfile(profileId) {
+        // Validation: Must be owner
+        if (!this.isProfileOwner(profileId)) {
+          this.showAlert('You can only delete your own profile.', 'warning');
+          return false;
+        }
+
+        if (confirm('Are you sure you want to delete your profile?')) {
+          this.profiles = this.profiles.filter(p => p.id !== profileId);
+          this.saveProfiles();
+          this.showAlert('Profile deleted successfully!', 'success');
+          return true;
+        }
+        return false;
+      }
+
+      // ============ ALERT SYSTEM ============
+      showAlert(message, type = 'info') {
+        alert(`[${type.toUpperCase()}] ${message}`);
+      }
+
+      // ============ LOGOUT ============
+      logout() {
+        if (confirm('Are you sure you want to logout?')) {
+          localStorage.removeItem('currentUser');
+          window.location.reload();
+        }
+      }
+    }
+
+    // ============ APP INITIALIZATION ============
+    const app = new ProfileManager();
+
+    document.addEventListener('DOMContentLoaded', function() {
+      initApp();
+    });
+
+    function initApp() {
+      // Update UI based on auth status
+      if (app.currentUser) {
+        document.getElementById('userInfo').style.display = 'flex';
+        document.getElementById('currentUsername').textContent = app.currentUser.username;
+        document.getElementById('loginAlert').style.display = 'none';
+
+        // Show Add button only if user has no profile
+        if (app.getUserProfileCount() === 0) {
+          document.getElementById('addProfileSection').style.display = 'flex';
+        }
+      } else {
+        document.getElementById('userInfo').style.display = 'none';
+        document.getElementById('loginAlert').style.display = 'block';
+        document.getElementById('addProfileSection').style.display = 'none';
+      }
+
+      // Render profiles
+      renderProfiles();
+
+      // Setup event listeners
+      setupEventListeners();
+
+      // Mobile nav toggle
+      setupMobileNav();
+    }
+
+    // ============ RENDER PROFILES GRID ============
+    function renderProfiles() {
+      const grid = document.getElementById('profilesGrid');
+      const emptyState = document.getElementById('emptyState');
+
+      grid.innerHTML = '';
+
+      if (app.profiles.length === 0) {
+        emptyState.style.display = 'block';
+        grid.style.display = 'none';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      grid.style.display = 'grid';
+
+      // Render each profile
+      app.profiles.forEach(profile => {
+        const card = createProfileCard(profile);
+        grid.appendChild(card);
+      });
+    }
+
+    // ============ CREATE PROFILE CARD ELEMENT ============
+    function createProfileCard(profile) {
+      const card = document.createElement('div');
+      card.className = 'profile-card';
+
+      const imageHtml = profile.image
+        ? `<img src="${profile.image}" alt="${profile.title}" onerror="this.parentElement.innerHTML = '👤'">`
+        : '👤';
+
+      // Determine if current user is owner
+      const isOwner = app.currentUser && profile.ownerId === app.currentUser.id;
+
+      // Get owner username from users storage (simulated here)
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const owner = users.find(u => u.id === profile.ownerId);
+      const ownerName = owner ? owner.username : 'Unknown';
+
+      // Build action buttons based on ownership
+      let actions = '';
+      if (isOwner) {
+        // Owner sees Edit, Delete, View
+        actions = `
+          <button class="btn btn-secondary" onclick="openEditModal(${profile.id})">Edit</button>
+          <button class="btn btn-danger" onclick="app.deleteProfile(${profile.id}); renderProfiles();">Delete</button>
+          <a href="#" class="btn btn-secondary" style="text-decoration: none;">View</a>
+        `;
+      } else {
+        // Non-owners see only View
+        actions = `<a href="#" class="btn btn-secondary" style="text-decoration: none; flex: 1;">View</a>`;
+      }
+
+      card.innerHTML = `
+        <div class="profile-image">${imageHtml}</div>
+        <h3 class="profile-title">${escapeHtml(profile.title)}</h3>
+        <p class="profile-description">${escapeHtml(profile.description)}</p>
+        <span class="profile-category">${escapeHtml(profile.category.charAt(0).toUpperCase() + profile.category.slice(1))}</span>
+        <p class="profile-owner">Created by <strong>${escapeHtml(ownerName)}</strong></p>
+        <div class="profile-actions">
+          ${actions}
+        </div>
+      `;
+
+      return card;
+    }
+
+    /* FIREBASE (optional) - initialize using project's firebase-config.js */
+  </script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+    import { firebaseConfig } from "../firebase-config.js";
+
+    try {
+      const fbApp = initializeApp(firebaseConfig);
+      try {
+        const analytics = getAnalytics(fbApp);
+        console.log('Firebase initialized with analytics');
+      } catch (e) {
+        console.log('Firebase initialized (analytics not available):', e.message);
+      }
+    } catch (err) {
+      console.warn('Firebase initialization failed:', err.message);
+    }
+  </script>
+
+    // ============ SETUP EVENT LISTENERS ============
+    function setupEventListeners() {
+      const modal = document.getElementById('profileModal');
+      const btnAddProfile = document.getElementById('btnAddProfile');
+      const btnCloseModal = document.getElementById('btnCloseModal');
+      const btnCancelModal = document.getElementById('btnCancelModal');
+      const profileForm = document.getElementById('profileForm');
+
+      // Add profile button
+      if (btnAddProfile) {
+        btnAddProfile.addEventListener('click', () => openAddModal());
+      }
+
+      // Close modal
+      btnCloseModal.addEventListener('click', () => closeModal());
+      btnCancelModal.addEventListener('click', () => closeModal());
+
+      // Close modal when clicking outside
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      // Form submission
+      profileForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        saveProfile();
+      });
+    }
+
+    // ============ OPEN ADD MODAL ============
+    function openAddModal() {
+      if (!app.checkAuth()) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Validation: Check profile limit
+      if (app.getUserProfileCount() >= 1) {
+        alert('You can only create one profile. Delete your current profile first.');
+        return;
+      }
+
+      const modal = document.getElementById('profileModal');
+      const form = document.getElementById('profileForm');
+      const modalTitle = document.getElementById('modalTitle');
+
+      form.reset();
+      modalTitle.textContent = 'Create Your Profile';
+      app.editingProfileId = null;
+
+      modal.classList.add('open');
+    }
+
+    // ============ OPEN EDIT MODAL ============
+    function openEditModal(profileId) {
+      // Validation: Must be owner
+      if (!app.isProfileOwner(profileId)) {
+        alert('You can only edit your own profile.');
+        return;
+      }
+
+      const profile = app.profiles.find(p => p.id === profileId);
+      if (!profile) return;
+
+      const modal = document.getElementById('profileModal');
+      const form = document.getElementById('profileForm');
+      const modalTitle = document.getElementById('modalTitle');
+
+      modalTitle.textContent = 'Edit Your Profile';
+      document.getElementById('profileTitle').value = profile.title;
+      document.getElementById('profileDescription').value = profile.description;
+      document.getElementById('profileCategory').value = profile.category;
+      document.getElementById('profileImage').value = profile.image || '';
+      app.editingProfileId = profileId;
+
+      modal.classList.add('open');
+    }
+
+    // ============ CLOSE MODAL ============
+    function closeModal() {
+      const modal = document.getElementById('profileModal');
+      modal.classList.remove('open');
+      app.editingProfileId = null;
+    }
+
+    // ============ SAVE PROFILE ============
+    function saveProfile() {
+      const data = {
+        title: document.getElementById('profileTitle').value.trim(),
+        description: document.getElementById('profileDescription').value.trim(),
+        category: document.getElementById('profileCategory').value,
+        image: document.getElementById('profileImage').value.trim()
+      };
+
+      if (!data.title || !data.description || !data.category) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      let success = false;
+
+      if (app.editingProfileId) {
+        // Edit existing profile
+        success = app.editProfile(app.editingProfileId, data);
+      } else {
+        // Add new profile
+        success = app.addProfile(data);
+      }
+
+      if (success) {
+        closeModal();
+        renderProfiles();
+        initApp(); // Update UI
+      }
+    }
+
+    // ============ UTILITY: ESCAPE HTML ============
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ============ SETUP MOBILE NAVIGATION ============
+    function setupMobileNav() {
+      const navToggle = document.querySelector('.nav-toggle');
+      const navList = document.getElementById('nav-list');
+
+      if (navToggle) {
+        navToggle.addEventListener('click', function() {
+          const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+          navToggle.setAttribute('aria-expanded', !isOpen);
+          navList.classList.toggle('open');
+        });
+      }
+
+      document.querySelectorAll('.nav-list a').forEach(link => {
+        link.addEventListener('click', function() {
+          navToggle.setAttribute('aria-expanded', 'false');
+          navList.classList.remove('open');
+        });
+      });
+    }
+
+    // ============ LOGOUT FUNCTION ============
+    // Expose to global scope for onclick handler
+    window.app.logout = function() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('currentUser');
+        window.location.reload();
+      }
+    };
+  </script>
+</body>
+</html>

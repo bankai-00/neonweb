@@ -1,0 +1,16 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>NeonPort - Tests</title></head><body>
+<h1>Basic smoke tests</h1>
+<div id="results"></div>
+<script>
+function assert(cond,msg){
+  const d = document.createElement('div'); d.textContent = (cond? 'PASS: ':'FAIL: ')+msg; d.style.color = cond? 'green':'red'; document.getElementById('results').appendChild(d);
+}
+
+try{
+  assert(location.protocol==='file:' || location.hostname==='localhost','Page loaded locally or on localhost')
+  assert(typeof window.localStorage !== 'undefined','localStorage available')
+  assert(typeof crypto.subtle !== 'undefined','Web Crypto available')
+}catch(e){ document.getElementById('results').textContent = 'Error running tests: '+e }
+</script>
+</body></html>
